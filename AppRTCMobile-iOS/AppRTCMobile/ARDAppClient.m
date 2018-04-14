@@ -305,7 +305,7 @@ static int const kKbpsMultiplier = 1000;
   _isInitiator = NO;
   _hasReceivedSdp = NO;
   _messageQueue = [NSMutableArray array];
-  _localVideoTrack = nil;
+  _localVideoTrack = nil; //Strange crash in c++ code (scoped_ptr) without this line
 #if defined(WEBRTC_IOS)
   [_factory stopAecDump];
   [_peerConnection stopRtcEventLog];
