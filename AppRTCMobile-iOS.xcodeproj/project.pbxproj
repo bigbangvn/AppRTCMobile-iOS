@@ -34,7 +34,6 @@
 		07077B45207E7F0200B9FCD8 /* ARDStatsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07077AFF207E7F0200B9FCD8 /* ARDStatsView.m */; };
 		07077B46207E7F0200B9FCD8 /* ARDVideoCallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07077B01207E7F0200B9FCD8 /* ARDVideoCallView.m */; };
 		07077B47207E7F0200B9FCD8 /* ARDVideoCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07077B03207E7F0200B9FCD8 /* ARDVideoCallViewController.m */; };
-		07077B48207E7F0200B9FCD8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07077B04207E7F0200B9FCD8 /* Info.plist */; };
 		07077B49207E7F0200B9FCD8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 07077B05207E7F0200B9FCD8 /* main.m */; };
 		07077B4A207E7F0200B9FCD8 /* foreman.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 07077B07207E7F0200B9FCD8 /* foreman.mp4 */; };
 		07077B4B207E7F0200B9FCD8 /* ic_call_end_black_24dp.png in Resources */ = {isa = PBXBuildFile; fileRef = 07077B08207E7F0200B9FCD8 /* ic_call_end_black_24dp.png */; };
@@ -424,7 +423,6 @@
 				07077B59207E7F0200B9FCD8 /* Roboto-Regular.ttf in Resources */,
 				07077B4E207E7F0200B9FCD8 /* ic_clear_black_24dp@2x.png in Resources */,
 				07077B54207E7F0200B9FCD8 /* ic_switch_video_black_24dp@2x.png in Resources */,
-				07077B48207E7F0200B9FCD8 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

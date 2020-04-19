@@ -11,6 +11,7 @@
 #import <Foundation/Foundation.h>
 #import "WebRTC/RTCPeerConnection.h"
 #import "WebRTC/RTCVideoTrack.h"
+#import "WebRTC/RTCDataChannel.h"
 
 typedef NS_ENUM(NSInteger, ARDAppClientState) {
   // Disconnected from servers.
@@ -60,7 +61,7 @@ didCreateLocalFileCapturer:(RTCFileVideoCapturer *)fileCapturer;
 
 // Handles connections to the AppRTC server for a given room. Methods on this
 // class should only be called from the main queue.
-@interface ARDAppClient : NSObject
+@interface ARDAppClient : NSObject<RTCDataChannelDelegate>
 
 // If |shouldGetStats| is true, stats will be reported in 1s intervals through
 // the delegate.

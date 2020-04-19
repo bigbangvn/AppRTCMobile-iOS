@@ -25,6 +25,7 @@
 #import "WebRTC/RTCVideoCodecFactory.h"
 #import "WebRTC/RTCVideoSource.h"
 #import "WebRTC/RTCVideoTrack.h"
+#import "WebRTC/RTCDataChannelConfiguration.h"
 
 #import "ARDAppEngineClient.h"
 #import "ARDJoinResponse.h"
@@ -104,6 +105,8 @@ static int const kKbpsMultiplier = 1000;
   ARDTimerProxy *_statsTimer;
   ARDSettingsModel *_settings;
   RTCVideoTrack *_localVideoTrack;
+    
+  RTCDataChannel *_dataChannel;
 }
 
 @synthesize shouldGetStats = _shouldGetStats;
@@ -425,6 +428,7 @@ static int const kKbpsMultiplier = 1000;
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection
     didOpenDataChannel:(RTCDataChannel *)dataChannel {
+    NSLog(@"%s: %@", __func__, dataChannel.description);
 }
 
 #pragma mark - RTCSessionDescriptionDelegate
@@ -533,6 +537,14 @@ static int const kKbpsMultiplier = 1000;
   _peerConnection = [_factory peerConnectionWithConfiguration:config
                                                   constraints:constraints
                                                      delegate:self];
+    
+    // Create data channel
+    RTCDataChannelConfiguration *dconfig = [RTCDataChannelConfiguration new];
+    dconfig.isNegotiated = NO;
+    _dataChannel = [_peerConnection dataChannelForLabel:@"TestDC" configuration:dconfig];
+    _dataChannel.delegate = self;
+    
+    
   // Create AV senders.
   [self createMediaSenders];
   if (_isInitiator) {
@@ -759,10 +771,15 @@ static int const kKbpsMultiplier = 1000;
     @"OfferToReceiveAudio" : @"true",
     @"OfferToReceiveVideo" : @"true"
   };
+    
+    NSDictionary *optionalConstraints = @{
+        @"internalSctpDataChannels": @"true"
+    };
+    
   RTCMediaConstraints* constraints =
       [[RTCMediaConstraints alloc]
           initWithMandatoryConstraints:mandatoryConstraints
-                   optionalConstraints:nil];
+                   optionalConstraints:optionalConstraints];
   return constraints;
 }
 
@@ -771,7 +788,9 @@ static int const kKbpsMultiplier = 1000;
     return _defaultPeerConnectionConstraints;
   }
   NSString *value = _isLoopback ? @"false" : @"true";
-  NSDictionary *optionalConstraints = @{ @"DtlsSrtpKeyAgreement" : value };
+  NSDictionary *optionalConstraints = @{ @"DtlsSrtpKeyAgreement" : value,
+                                         @"internalSctpDataChannels": @"true"
+  };
   RTCMediaConstraints* constraints =
       [[RTCMediaConstraints alloc]
           initWithMandatoryConstraints:nil
@@ -834,6 +853,25 @@ static int const kKbpsMultiplier = 1000;
       break;
   }
   return error;
+}
+
+- (void)dataChannelDidChangeState:(RTCDataChannel *)dataChannel {
+    NSLog(@"%s: %@", __func__, dataChannel.description);
+}
+
+/** The data channel successfully received a data buffer. */
+- (void)dataChannel:(RTCDataChannel *)dataChannel
+didReceiveMessageWithBuffer:(RTCDataBuffer *)buffer {
+    NSLog(@"%s", __func__);
+    
+    NSString *msg = [NSString stringWithUTF8String:buffer.data.bytes];
+    NSLog(@"Received: %@", msg);
+}
+
+/** The data channel's |bufferedAmount| changed. */
+- (void)dataChannel:(RTCDataChannel *)dataChannel
+didChangeBufferedAmount:(uint64_t)amount {
+    NSLog(@"%s", __func__);
 }
 
 @end
